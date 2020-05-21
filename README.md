@@ -6,22 +6,19 @@ In each folder you will find a README.md file with the instructions for the assi
 
 ###  Assignment 1
 
-* [k-Nearest Neighbor](https://github.com/israfelsr/CS231n/blob/master/assignment1/knn.ipynb)
-
-* [Support Vector Machines](https://github.com/israfelsr/CS231n/blob/master/assignment1/svm.ipynb)
-
-* [Softmax Classifier](https://github.com/israfelsr/CS231n/blob/master/assignment1/softmax.ipynb)
-
-* [Two-Layer Neural Network](https://github.com/israfelsr/CS231n/blob/master/assignment1/two_layer_net.ipynb)
-
-* [Image Features](https://github.com/israfelsr/CS231n/blob/master/assignment1/features.ipynb)
+- [k-Nearest Neighbor](https://github.com/israfelsr/CS231n/blob/master/assignment1/knn.ipynb)
+- [Support Vector Machines](https://github.com/israfelsr/CS231n/blob/master/assignment1/svm.ipynb)
+- [Softmax Classifier](https://github.com/israfelsr/CS231n/blob/master/assignment1/softmax.ipynb)
+- [Two-Layer Neural Network](https://github.com/israfelsr/CS231n/blob/master/assignment1/two_layer_net.ipynb)
+- [Image Features](https://github.com/israfelsr/CS231n/blob/master/assignment1/features.ipynb)
 
 
 ### Assignment 2
 
-- [Fully Connected Networks]()
-- [Batch Normalization]()
-- [Dropout]()
-- [Convolutional Networks]()
-- [Tensorflow]()
-- [Pytorch]()
+- [Fully Connected Networks](https://github.com/israfelsr/CS231n/blob/master/assignment2/FullyConnectedNets.ipynb)
+- [Batch Normalization](https://github.com/israfelsr/CS231n/blob/master/assignment2/BatchNormalization.ipynb)
+- [Dropout](https://github.com/israfelsr/CS231n/blob/master/assignment2/Dropout.ipynb)
+- [Convolutional Networks](https://github.com/israfelsr/CS231n/blob/master/assignment2/ConvolutionalNetworks.ipynb)
+- Tensorflow
+- Pytorch
+
