@@ -19,6 +19,6 @@ In each folder you will find a README.md file with the instructions for the assi
 - [Batch Normalization](https://github.com/israfelsr/CS231n/blob/master/assignment2/BatchNormalization.ipynb)
 - [Dropout](https://github.com/israfelsr/CS231n/blob/master/assignment2/Dropout.ipynb)
 - [Convolutional Networks](https://github.com/israfelsr/CS231n/blob/master/assignment2/ConvolutionalNetworks.ipynb)
-- Tensorflow
+- [Tensorflow](https://github.com/israfelsr/CS231n/blob/master/assignment2/TensorFlow.ipynb)
 - Pytorch
 
