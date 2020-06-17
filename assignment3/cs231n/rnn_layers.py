@@ -287,8 +287,16 @@ def lstm_step_forward(x, prev_h, prev_c, Wx, Wh, b):
     # You may want to use the numerically stable sigmoid implementation above.  #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-    pass
+    
+    _, H = prev_h.shape
+    hx = np.dot(prev_h, Wh) + np.dot(x, Wx) + b
+    i = sigmoid(hx[:,:H])
+    f = sigmoid(hx[:,H:2*H])
+    o = sigmoid(hx[:,2*H:3*H])
+    g = np.tanh(hx[:,3*H:4*H])
+    next_c = np.multiply(f,prev_c) + np.multiply(i,g)
+    next_h = np.multiply(o,np.tanh(next_c))
+    cache = (next_c, g, o, f, i, hx, prev_c, prev_h, Wh, Wx, x)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -324,7 +332,27 @@ def lstm_step_backward(dnext_h, dnext_c, cache):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    next_c, g, o, f, i, hx, prev_c, prev_h, Wh, Wx, x = cache
+    _, H = prev_h.shape
+    do = np.multiply(dnext_h, np.tanh(next_c))
+    dnext_c += dnext_h * (1-np.tanh(next_c)**2) * o  # NH
+
+    dprev_c = np.multiply(dnext_c,f)
+    df = dnext_c * prev_c
+    di = dnext_c * g
+    dg = dnext_c * i
+
+    dhx = np.zeros_like(hx)
+    dhx[:,:H] = di *  sigmoid(hx[:,:H]) * (1-sigmoid(hx[:,:H]))
+    dhx[:,H:2*H] = df * sigmoid(hx[:,H:2*H]) * (1-sigmoid(hx[:,H:2*H]))
+    dhx[:,2*H:3*H] = do * sigmoid(hx[:,2*H:3*H]) * (1-sigmoid(hx[:,2*H:3*H]))
+    dhx[:,3*H:4*H] = dg * (1-np.tanh(hx[:,3*H:4*H])**2)
+
+    db = np.sum(dhx, axis=0)
+    dWh = np.dot(prev_h.T, dhx) # N4H NH > H4H
+    dWx = np.dot(x.T, dhx)  #ND N4H> D4H
+    dprev_h = np.dot(dhx, Wh.T) # N4H H4H > NH
+    dx = np.dot(dhx, Wx.T)# N4H D4H > ND
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -356,14 +384,22 @@ def lstm_forward(x, h0, Wx, Wh, b):
     - h: Hidden states for all timesteps of all sequences, of shape (N, T, H)
     - cache: Values needed for the backward pass.
     """
-    h, cache = None, None
+    h, cache = None, {}
     #############################################################################
     # TODO: Implement the forward pass for an LSTM over an entire timeseries.   #
     # You should use the lstm_step_forward function that you just defined.      #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    N, T, D = x.shape
+    H = h0.shape[1]
+    h = np.zeros((N,T,H))
+    ct = np.zeros_like(h0)
+    ht = h0
+    cache['dims'] = (N, T, D)
+    for batch in range(T):
+        ht, ct, cache[batch] = lstm_step_forward(x[:,batch,:], ht, ct, Wx, Wh, b)
+        h[:,batch,:] = ht
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -388,14 +424,27 @@ def lstm_backward(dh, cache):
     - dWh: Gradient of hidden-to-hidden weight matrix of shape (H, 4H)
     - db: Gradient of biases, of shape (4H,)
     """
-    dx, dh0, dWx, dWh, db = None, None, None, None, None
+    dx, dh0, dWx, dWh, db = 0, 0, 0, 0, 0
     #############################################################################
     # TODO: Implement the backward pass for an LSTM over an entire timeseries.  #
     # You should use the lstm_step_backward function that you just defined.     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    N, T, D = cache['dims']
+    dx = np.zeros((N,T,D))
+    batch = T - 1
+    dht = 0
+    dct = 0
+    while batch >= 0:
+        dht += dh[:,batch,:]
+        dxt, dht, dct, dWxt, dWht, dbt = lstm_step_backward(dht, dct, cache[batch])
+        dx[:,batch,:] = dxt
+        dWx += dWxt
+        dWh += dWht
+        db += dbt
+        batch -= 1
+    dh0 = dht
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
