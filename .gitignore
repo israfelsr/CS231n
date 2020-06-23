@@ -1,2 +1,4 @@
 assignment3/cs231n/datasets/*
 *.DS_Store
+assignment3/cs231n/__pycache__/*
+assignment3/cs231n/classifiers/__pycache__/*

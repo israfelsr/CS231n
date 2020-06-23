@@ -35,7 +35,14 @@ def compute_saliency_maps(X, y, model):
     ###############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    x = tf.convert_to_tensor(X)
+    with tf.GradientTape() as tape:
+        tape.watch(x)
+        scores = model(x)
+        correct_scores = tf.gather_nd(scores, tf.stack((tf.range(y.shape[0]), y), axis=1))
+    dx = tape.gradient(correct_scores, x)
+    abs_dx = np.absolute(dx)
+    saliency = np.amax(abs_dx, axis=-1)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -84,8 +91,24 @@ def make_fooling_image(X, target_y, model):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
-
+    num_iter = 100
+    X_fooling = tf.convert_to_tensor(X_fooling)
+    #dx = 0
+    for i in range(num_iter):
+        with tf.GradientTape() as tape:
+            tape.watch(X_fooling)
+            scores = model(X_fooling)
+            target_score = scores[:,target_y]
+        if np.argmax(scores) == target_y:
+            print('Needed iterations: %i' %i)
+            break
+        #dx_old = dx
+        dx = tape.gradient(target_score, X_fooling)
+        #dx_norm = (dx - dx_old)**2
+        X_fooling += learning_rate * dx #/ dx_norm
+        if i%10 == 0:
+            print('Iteration: %i' %i)
+        
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
     #                             END OF YOUR CODE                               #
@@ -103,7 +126,14 @@ def class_visualization_update_step(X, model, target_y, l2_reg, learning_rate):
     ########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    X = tf.convert_to_tensor(X)
+    with tf.GradientTape() as tape:
+        tape.watch(X)
+        scores = model(X)
+        target_scores = scores[:,target_y]
+        loss = target_scores - l2_reg * np.sum(X * X)
+    dx = tape.gradient(loss, X)
+    X += learning_rate * dx
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ############################################################################
