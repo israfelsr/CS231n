@@ -19,10 +19,9 @@ In each folder you will find a README.md file with the instructions for the assi
 - [Batch Normalization](https://github.com/israfelsr/CS231n/blob/master/assignment2/BatchNormalization.ipynb)
 - [Dropout](https://github.com/israfelsr/CS231n/blob/master/assignment2/Dropout.ipynb)
 - [Convolutional Networks](https://github.com/israfelsr/CS231n/blob/master/assignment2/ConvolutionalNetworks.ipynb)
-- [Tensorflow](https://github.com/israfelsr/CS231n/blob/master/assignment2/TensorFlow.ipynb)
-- [Pytorch](https://github.com/israfelsr/CS231n/blob/master/assignment2/PyTorch.ipynb)
+- [Tensorflow](https://github.com/israfelsr/CS231n/blob/master/assignment2/TensorFlow.ipynb) / [Pytorch](https://github.com/israfelsr/CS231n/blob/master/assignment2/PyTorch.ipynb)
 
 ### Assignment 3
 - [RNN Captioning](https://github.com/israfelsr/CS231n/blob/master/assignment3/RNN_Captioning.ipynb)
 - [LSTM Captioning](https://github.com/israfelsr/CS231n/blob/master/assignment3/LSTM_Captioning.ipynb)
-- [Network Visualization - Tensorflow](https://github.com/israfelsr/CS231n/blob/master/assignment3/NetworkVisualization-TensorFlow.ipynb)
+- Network Visualization ([Tensorflow](https://github.com/israfelsr/CS231n/blob/master/assignment3/NetworkVisualization-TensorFlow.ipynb) / [Pytorch](https://github.com/israfelsr/CS231n/blob/master/assignment3/NetworkVisualization-PyTorch.ipynb))

@@ -129,7 +129,7 @@ class TwoLayerNet(object):
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         c = W2.shape[1]
-        dsoft = scores / np.expand_dims(np.sum(scores, axis=1), axis=c)
+        dsoft = scores / np.expand_dims(np.sum(scores, axis=1), axis=1)
         dsoft[np.arange(N), y] -= 1
         dW2 = h.T.dot(dsoft)/N
         grads['b2'] = dW2[-1,:]

@@ -34,7 +34,12 @@ def compute_saliency_maps(X, y, model):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    scores = model(X)
+    correct_scores = scores.gather(1, y.view(-1, 1)).squeeze()
+    correct_scores.backward(torch.ones(y.shape[0]))
+    dx = X.grad
+    abs_dx = np.absolute(dx)
+    saliency, _ = torch.max(abs_dx, dim=1)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -76,7 +81,22 @@ def make_fooling_image(X, target_y, model):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    num_iter = 100
+    #dx = 0
+    for i in range(num_iter):
+        scores = model(X_fooling)
+        target_score = scores[:,target_y]
+        if torch.argmax(scores) == target_y:
+            print('Needed iterations: %i' %i)
+            break
+        #dx_old = dx
+        target_score.backward()
+        dx = X_fooling.grad
+        #dx_norm = (dx - dx_old)**2
+        with torch.no_grad():
+            X_fooling += learning_rate * dx #/ dx_norm
+        if i%10 == 0:
+            print('Iteration: %i' %i)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -94,13 +114,20 @@ def class_visualization_update_step(img, model, target_y, l2_reg, learning_rate)
     ########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    img = img.requires_grad_()
+    scores = model(img)
+    target_scores = scores[:,target_y]
+    loss = target_scores - l2_reg * torch.sum(img * img)
+    loss.backward()
+    dx = img.grad
+    with torch.no_grad():
+        img += learning_rate * dx
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ########################################################################
     #                             END OF YOUR CODE                         #
     ########################################################################
-
+    return img
 
 def preprocess(img, size=224):
     transform = T.Compose([
